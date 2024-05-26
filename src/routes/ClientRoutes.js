@@ -1,13 +1,14 @@
 import express from "express";
 import ClientController from "../controllers/ClientController.js";
+import checkToken from '../utils/jwt/verify-token.js'
 
-const routes = express.Router();
+const clientRoutes = express.Router();
 
-routes.get("/", ClientController.findAll);
-routes.post("/register", ClientController.register);
-routes.post("/login", ClientController.login);
-routes.get("/:id", ClientController.findClient);
-routes.put("/:id", ClientController.updateClient);
-routes.delete("/:id", ClientController.deleteClient);
+clientRoutes.get("/", ClientController.findAll);
+clientRoutes.post("/register", ClientController.register);
+clientRoutes.post("/login", ClientController.login);
+clientRoutes.get("/:id", ClientController.findClient);
+clientRoutes.put("/:id", checkToken, ClientController.updateClient);
+clientRoutes.delete("/:id", checkToken, ClientController.deleteClient);
 
-export { routes as default };
+export { clientRoutes as default};

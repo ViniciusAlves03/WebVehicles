@@ -40,9 +40,14 @@ class ClientController {
     if (!password) { return sendError(res, "a senha é obrigatória!") }
 
     const client = await Client.findByEmail(email);
-    //conferir as senhas depois
+
+    if (!client) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
     const checkPassword = await comparePassword(password, client.password)
-    if ((!client)) {
+
+    if (!checkPassword) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
@@ -108,7 +113,7 @@ class ClientController {
     if (client.id !== parseInt(req.params.id)) {
       return sendError(res, "Você não tem permissão para modificar este cliente.");
     }
-    
+
     await Client.destroy({
       where: {
         id: req.params.id,

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import getToken from './get-token';
+import getToken from './get-token.js';
 
 const checkToken = (req, res, next) => {
     {

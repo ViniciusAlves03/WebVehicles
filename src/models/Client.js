@@ -32,7 +32,7 @@ const Client = db.define("client", {
   }
 });
 
-Client.findByEmail = async function(email) {
+Client.findByEmail = async function (email) {
   return await this.findOne({ where: { email } });
 };
 
