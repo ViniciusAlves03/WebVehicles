@@ -92,6 +92,10 @@ class StoreController {
 
         const { name, password, phone, street, number, neighborhood, city, state } = req.body
 
+        if (store.id !== parseInt(req.params.id)) {
+            return sendError(res, "Você não tem permissão para modificar esta loja.");
+        }
+
         if (!name) { return sendError(res, "o nome é obrigatório!") }
         if (!phone) { return sendError(res, "o número de telefone é obrigatório!") }
         if (!password) { return sendError(res, "a senha é obrigatória!") }
@@ -101,9 +105,7 @@ class StoreController {
         if (!city) { return sendError(res, "a cidade é obrigatória!") }
         if (!state) { return sendError(res, "o estado é obrigatória!") }
 
-        if (store.id !== parseInt(req.params.id)) {
-            return sendError(res, "Você não tem permissão para modificar esta loja.");
-        }
+        const image1 = req.file.filename
 
         await Store.update(
             {
@@ -114,7 +116,8 @@ class StoreController {
                 number: number,
                 neighborhood: neighborhood,
                 city: city,
-                state: state
+                state: state,
+                image1: image1
             },
             {
                 where: {

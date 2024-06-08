@@ -50,7 +50,10 @@ const Store = db.define("store", {
   state: {
     type: Sequelize.STRING,
     allowNull: false,
-  }
+  },
+  image1: {
+    type: Sequelize.STRING
+  },
 });
 
 Store.hasMany(Vehicle, { foreignKey: 'storeId' });

@@ -16,6 +16,15 @@ class VehicleController {
 
         const { name, engine, plate, chassis, color, brand, year, km, brakes, price, transmission, numSeats, numDoors, startingSystem, cargoCapacity, numAxles } = req.body
 
+        const images = req.files;
+        if (images.length < 3) {
+            return sendError(res, "São necessárias três imagens!");
+        }
+
+        const image1 = images[0]?.filename;
+        const image2 = images[1]?.filename;
+        const image3 = images[2]?.filename;
+
         if (!name) { return sendError(res, "o nome é obrigatório!") }
         if (!chassis) { return sendError(res, "o chassi é obrigatório!") }
         if (!color) { return sendError(res, "a cor é obrigatória!") }
@@ -23,12 +32,13 @@ class VehicleController {
         if (!year) { return sendError(res, "o ano é obrigatório!") }
         if (!km) { return sendError(res, "a km é obrigatório!") }
         if (!price) { return sendError(res, "o preço é obrigatório!") }
+        if (!image1 || !image2 || !image3) { return sendError(res, "As imagens são obrigatórias!") }
 
         if (store.id !== parseInt(req.params.id)) {
             return sendError(res, "Você não tem permissão para modificar esta loja.");
         }
 
-        const type  = req.params.type
+        const type = req.params.type
         const vehicleChassis = await Vehicle.findOne({ where: { chassis: chassis } });
         const status = 'available'
 
@@ -37,7 +47,7 @@ class VehicleController {
         }
 
         try {
-            const newVehicle = await Vehicle.create({ name, type: type, engine, plate, chassis, color, brand, year, status, km, brakes, price, transmission, numSeats, numDoors, startingSystem, cargoCapacity, numAxles, storeId: store.id });
+            const newVehicle = await Vehicle.create({ name, type: type, engine, plate, chassis, color, brand, year, status, km, brakes, price, transmission, numSeats, numDoors, startingSystem, cargoCapacity, numAxles, image1, image2, image3, storeId: store.id });
 
             res.status(201).json(newVehicle)
         } catch (error) {
@@ -48,24 +58,24 @@ class VehicleController {
 
     async getAllVehicles(req, res) {
 
-        const type  = req.params.type
-        const vehicles = await Vehicle.findAll({where: { type: type }});
+        const type = req.params.type
+        const vehicles = await Vehicle.findAll({ where: { type: type } });
 
         res.status(200).json({ vehicles })
     }
 
     async getVehicleByName(req, res) {
 
-        const name  = req.params.name
+        const name = req.params.name
 
-        const vehicles = await Vehicle.findAll({ where: { name: {[Op.like]: `%${name}%`} } });
+        const vehicles = await Vehicle.findAll({ where: { name: { [Op.like]: `%${name}%` } } });
 
         res.status(200).json({ vehicles })
     }
 
     async getVehicleById(req, res) {
 
-        const id  = req.params.id
+        const id = req.params.id
         const vehicle = await Vehicle.findByPk(id);
 
         res.status(200).json({ vehicle })
@@ -80,12 +90,12 @@ class VehicleController {
             return sendError(res, "Você não tem permissão para acessar estes veículos.");
         }
 
-        const vehicles = await Vehicle.findAll({where: { storeId: store.id }});
+        const vehicles = await Vehicle.findAll({ where: { storeId: store.id } });
 
         res.status(200).json({ vehicles })
     }
 
-    async updateVehicle(req, res){
+    async updateVehicle(req, res) {
 
         const token = getToken(req);
         const store = await getStoreByToken(token);
@@ -94,9 +104,9 @@ class VehicleController {
             return sendError(res, "Você não tem permissão para modificar este veículo.");
         }
 
-        const vehicle = await Vehicle.findOne({where: { id: req.params.id, storeId: store.id }});
+        const vehicle = await Vehicle.findOne({ where: { id: req.params.id, storeId: store.id } });
 
-        if (!vehicle){
+        if (!vehicle) {
             return sendError(res, "Veículo não encontrado!")
         }
 
@@ -108,6 +118,15 @@ class VehicleController {
         if (!year) { return sendError(res, "o ano é obrigatório!") }
         if (!km) { return sendError(res, "a km é obrigatório!") }
         if (!price) { return sendError(res, "o preço é obrigatório!") }
+
+        const images = req.files;
+        let image1, image2, image3;
+
+        if (images && images.length >= 3) {
+            image1 = images[0]?.filename;
+            image2 = images[1]?.filename;
+            image3 = images[2]?.filename;
+        }
 
         await Vehicle.update(
             {
@@ -125,7 +144,10 @@ class VehicleController {
                 numDoors: numDoors,
                 startingSystem: startingSystem,
                 cargoCapacity: cargoCapacity,
-                numAxles: numAxles
+                numAxles: numAxles,
+                image1: image1,
+                image2: image2,
+                image3: image3
             },
             {
                 where: {
@@ -139,7 +161,7 @@ class VehicleController {
 
     }
 
-    async deleteVehicle(req, res){
+    async deleteVehicle(req, res) {
 
         const token = getToken(req);
         const store = await getStoreByToken(token);
@@ -148,9 +170,9 @@ class VehicleController {
             return sendError(res, "Você não tem permissão para deletar este veículo.");
         }
 
-        const vehicle = await Vehicle.findOne({where: { id: req.params.id, storeId: store.id }});
+        const vehicle = await Vehicle.findOne({ where: { id: req.params.id, storeId: store.id } });
 
-        if (!vehicle){
+        if (!vehicle) {
             return sendError(res, "Veículo não encontrado!")
         }
 

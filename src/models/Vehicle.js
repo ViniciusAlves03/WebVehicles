@@ -72,6 +72,15 @@ const Vehicle = db.define("vehicle", {
   numAxles: {
     type: Sequelize.INTEGER,
   },
+  image1: {
+    type: Sequelize.STRING
+  },
+  image2: {
+    type: Sequelize.STRING
+  },
+  image3: {
+    type: Sequelize.STRING
+  },
   storeId: {
     type: Sequelize.INTEGER.UNSIGNED,
     allowNull: false,
