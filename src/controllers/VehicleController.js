@@ -56,10 +56,17 @@ class VehicleController {
         }
     }
 
-    async getAllVehicles(req, res) {
+    async getAllVehiclesCategory(req, res) {
 
         const type = req.params.type
         const vehicles = await Vehicle.findAll({ where: { type: type } });
+
+        res.status(200).json({ vehicles })
+    }
+
+    async getAll(req, res){
+
+        const vehicles = await Vehicle.findAll();
 
         res.status(200).json({ vehicles })
     }
@@ -83,14 +90,7 @@ class VehicleController {
 
     async getAllStoreVehicles(req, res) {
 
-        const token = getToken(req);
-        const store = await getStoreByToken(token);
-
-        if (store.id !== parseInt(req.params.id)) {
-            return sendError(res, "Você não tem permissão para acessar estes veículos.");
-        }
-
-        const vehicles = await Vehicle.findAll({ where: { storeId: store.id } });
+        const vehicles = await Vehicle.findAll({ where: { storeId: req.params.id } });
 
         res.status(200).json({ vehicles })
     }

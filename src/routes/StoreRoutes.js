@@ -8,7 +8,7 @@ const storeRoutes = express.Router();
 storeRoutes.get("/", StoreController.findAll);
 storeRoutes.post("/register", StoreController.register);
 storeRoutes.post("/login", StoreController.login);
-storeRoutes.get("/:name", StoreController.findStore);
+storeRoutes.get("/:id", StoreController.findStore);
 storeRoutes.put("/:id", checkToken, imageUpload.single('images'), StoreController.updateStore);
 storeRoutes.delete("/:id", checkToken, StoreController.deleteStore);
 

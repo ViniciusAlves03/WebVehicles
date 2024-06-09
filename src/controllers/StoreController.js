@@ -73,7 +73,7 @@ class StoreController {
     async findStore(req, res) {
         try {
 
-            const store = await Store.findOne({ where: { name: req.params.name } });
+            const store = await Store.findOne({ where: { id: req.params.id } });
             if (!store) {
                 return sendError(res, "Loja não encontrada!");
             }
