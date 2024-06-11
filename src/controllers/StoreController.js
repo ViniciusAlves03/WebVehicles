@@ -33,9 +33,11 @@ class StoreController {
             return res.status(401).json({ error: 'CNPJ já cadastrado!' });
         }
 
+        const image1 = 'store_default.png'
+
         try {
             const passwordHash = await hashPassword(password)
-            const newStore = await Store.create({ name, email, cnpj, password: passwordHash, phone, street, number, neighborhood, city, state });
+            const newStore = await Store.create({ name, email, cnpj, password: passwordHash, phone, street, number, neighborhood, city, state, image1: image1 });
 
             res.status(201).json(newStore)
         } catch (error) {
@@ -130,13 +132,6 @@ class StoreController {
     }
 
     async deleteStore(req, res) {
-
-        const token = getToken(req)
-        const store = await getStoreByToken(token)
-
-        if (store.id !== parseInt(req.params.id)) {
-            return sendError(res, "Você não tem permissão para deletar esta loja.");
-        }
 
         await Store.destroy({
             where: {

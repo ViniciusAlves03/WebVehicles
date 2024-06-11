@@ -5,7 +5,7 @@ import checkToken from '../utils/jwt/verify-token.js'
 
 const storeRoutes = express.Router();
 
-storeRoutes.get("/", StoreController.findAll);
+storeRoutes.get("/", imageUpload.single('images'), StoreController.findAll);
 storeRoutes.post("/register", StoreController.register);
 storeRoutes.post("/login", StoreController.login);
 storeRoutes.get("/:id", StoreController.findStore);

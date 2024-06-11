@@ -50,6 +50,7 @@ class VehicleController {
             const newVehicle = await Vehicle.create({ name, type: type, engine, plate, chassis, color, brand, year, status, km, brakes, price, transmission, numSeats, numDoors, startingSystem, cargoCapacity, numAxles, image1, image2, image3, storeId: store.id });
 
             res.status(201).json(newVehicle)
+            console.log(newVehicle)
         } catch (error) {
             console.error('Erro ao registrar loja:', error);
             res.status(500).json({ error: 'Erro interno do servidor' });

@@ -7,7 +7,7 @@ const clientRoutes = express.Router();
 clientRoutes.get("/", ClientController.findAll);
 clientRoutes.post("/register", ClientController.register);
 clientRoutes.post("/login", ClientController.login);
-clientRoutes.get("/:id", ClientController.findClient);
+clientRoutes.get("/:id", checkToken, ClientController.findClient);
 clientRoutes.put("/:id", checkToken, ClientController.updateClient);
 clientRoutes.delete("/:id", checkToken, ClientController.deleteClient);
 
