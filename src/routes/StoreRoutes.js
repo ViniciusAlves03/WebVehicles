@@ -10,6 +10,6 @@ storeRoutes.post("/register", StoreController.register);
 storeRoutes.post("/login", StoreController.login);
 storeRoutes.get("/:id", StoreController.findStore);
 storeRoutes.put("/:id", checkToken, imageUpload.single('images'), StoreController.updateStore);
-storeRoutes.delete("/:id", StoreController.deleteStore);
+storeRoutes.delete("/:id", checkToken, StoreController.deleteStore);
 
 export { storeRoutes as default};

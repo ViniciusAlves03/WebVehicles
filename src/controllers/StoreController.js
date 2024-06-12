@@ -109,11 +109,13 @@ class StoreController {
 
         const image1 = req.file.filename
 
+        const passwordHash = await hashPassword(password)
+
         await Store.update(
             {
                 name: name,
                 phone: phone,
-                password: password,
+                password: passwordHash,
                 street: street,
                 number: number,
                 neighborhood: neighborhood,

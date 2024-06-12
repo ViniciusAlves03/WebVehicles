@@ -89,11 +89,13 @@ class ClientController {
       return sendError(res, "Você não tem permissão para modificar este cliente.");
     }
 
+    const passwordHash = await hashPassword(password)
+
     await Client.update(
       {
         name: name,
         phone: phone,
-        password: password
+        password: passwordHash
       },
       {
         where: {

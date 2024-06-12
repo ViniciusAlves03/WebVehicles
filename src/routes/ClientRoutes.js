@@ -1,6 +1,7 @@
 import express from "express";
 import ClientController from "../controllers/ClientController.js";
 import checkToken from '../utils/jwt/verify-token.js'
+import imageUpload from "../utils/image-upload.js";
 
 const clientRoutes = express.Router();
 
